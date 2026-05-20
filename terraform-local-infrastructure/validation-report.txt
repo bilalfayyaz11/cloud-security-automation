@@ -1,0 +1,31 @@
+# Terraform Local Infrastructure Validation Report
+
+## Validation Summary
+
+Terraform was successfully installed and initialized.
+Terraform configuration was successfully formatted and validated.
+Terraform successfully generated a Vagrantfile for a local VirtualBox-based VM.
+
+## Infrastructure Defined
+
+VM Name: terraform-local-vm
+Base Image: ubuntu/jammy64
+Provider: VirtualBox via Vagrant
+CPU: 2
+Memory: 1024 MB
+Private IP: 192.168.56.20
+Provisioned Service: Apache2
+
+## Runtime Limitation
+
+The VM could not be started because the lab environment does not expose hardware virtualization support.
+
+Error observed:
+VT-x is not available (VERR_VMX_NO_VMX)
+
+This happens when trying to run VirtualBox inside an already virtualized/cloud-hosted lab environment without nested virtualization enabled.
+
+## Result
+
+Terraform IaC workflow completed successfully.
+Local VM runtime execution is blocked by the underlying lab platform, not by Terraform configuration.
