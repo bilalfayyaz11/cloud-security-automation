@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+
+    environment {
+        OPA = '/usr/local/bin/opa'
+    }
+
+    stages {
+
+        stage('Verify OPA') {
+            steps {
+                sh '''
+                    echo "===== OPA VERSION ====="
+                    $OPA version
+                '''
+            }
+        }
+
+        stage('Validate Compliant Deployment') {
+            steps {
+                sh '''
+                    echo "===== CHECKING COMPLIANT INPUT ====="
+
+                    RESULT=$($OPA eval \
+                    --format pretty \
+                    --input compliant_input.json \
+                    --data cloud_policy.rego \
+                    "data.cloud.deployments.deny")
+
+                    echo "$RESULT"
+
+                    if [ "$RESULT" != "[]" ]; then
+                        echo "Policy violation detected on compliant deployment"
+                        exit 1
+                    fi
+                '''
+            }
+        }
+
+        stage('Validate Non-Compliant Deployment') {
+            steps {
+                sh '''
+                    echo "===== CHECKING NON-COMPLIANT INPUT ====="
+
+                    RESULT=$($OPA eval \
+                    --format pretty \
+                    --input non_compliant_input.json \
+                    --data cloud_policy.rego \
+                    "data.cloud.deployments.deny")
+
+                    echo "$RESULT"
+
+                    if [ "$RESULT" = "[]" ]; then
+                        echo "Expected policy violation missing"
+                        exit 1
+                    fi
+                '''
+            }
+        }
+
+        stage('Simulated Deployment') {
+            steps {
+                echo 'OPA policy checks passed. Deployment approved.'
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}

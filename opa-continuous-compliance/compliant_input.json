@@ -1,0 +1,10 @@
+{
+  "resource": {
+    "name": "production-web-server",
+    "type": "compute_instance",
+    "tags": {
+      "environment": "production",
+      "owner": "team-a"
+    }
+  }
+}

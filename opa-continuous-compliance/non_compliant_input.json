@@ -1,0 +1,9 @@
+{
+  "resource": {
+    "name": "untagged-database",
+    "type": "database",
+    "tags": {
+      "environment": "production"
+    }
+  }
+}
