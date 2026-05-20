@@ -1,0 +1,12 @@
+{
+  "request_id": "b3cb9396-58ff-69e3-1c2c-3e0a09225fea",
+  "lease_id": "",
+  "lease_duration": 0,
+  "renewable": false,
+  "data": {
+    "ciphertext": "vault:v1:ntZpIUxT1ltBaihff9HzKsR0TpU8206dFfoV2DPqTBErT+1WArLx6u+kz0LWl/d0ipY8ZRHBE4XlBazzDg==",
+    "key_version": 1
+  },
+  "warnings": null,
+  "mount_type": "transit"
+}

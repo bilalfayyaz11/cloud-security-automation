@@ -1,0 +1,6 @@
+secret.txt
+decrypted_secret.txt
+limited-token.json
+limited-token.txt
+*.token
+*.secret

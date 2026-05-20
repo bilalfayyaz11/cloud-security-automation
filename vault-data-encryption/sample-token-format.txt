@@ -1,0 +1,2 @@
+Vault token output is intentionally excluded from this repository.
+Use vault token create -policy="encrypt-policy" locally to generate a token.

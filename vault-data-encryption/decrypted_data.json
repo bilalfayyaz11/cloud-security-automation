@@ -1,0 +1,11 @@
+{
+  "request_id": "5f350ed1-e8f2-e00e-a618-26b30e2eae13",
+  "lease_id": "",
+  "lease_duration": 0,
+  "renewable": false,
+  "data": {
+    "plaintext": "VGhpcyBpcyBhIHZlcnkgc2Vuc2l0aXZlIG1lc3NhZ2UK"
+  },
+  "warnings": null,
+  "mount_type": "transit"
+}
