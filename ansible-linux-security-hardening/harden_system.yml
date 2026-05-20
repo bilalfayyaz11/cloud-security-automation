@@ -1,0 +1,78 @@
+---
+- name: Harden local Ubuntu system
+  hosts: local
+  become: true
+  gather_facts: true
+
+  vars:
+    ssh_config_file: /etc/ssh/sshd_config.d/99-hardening.conf
+
+  tasks:
+    - name: Ensure required security packages are installed
+      ansible.builtin.apt:
+        name:
+          - ufw
+          - auditd
+        state: present
+        update_cache: true
+
+    - name: Ensure risky legacy services are stopped if present
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: false
+      loop:
+        - telnet
+        - nfs-server
+        - rpcbind
+      failed_when: false
+
+    - name: Set secure permissions on /etc/passwd
+      ansible.builtin.file:
+        path: /etc/passwd
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Set secure permissions on /etc/shadow
+      ansible.builtin.file:
+        path: /etc/shadow
+        owner: root
+        group: shadow
+        mode: "0640"
+
+    - name: Configure SSH hardening safely using drop-in file
+      ansible.builtin.copy:
+        dest: "{{ ssh_config_file }}"
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          PasswordAuthentication no
+          PermitRootLogin prohibit-password
+          X11Forwarding no
+          MaxAuthTries 3
+          ClientAliveInterval 300
+          ClientAliveCountMax 2
+      notify: Validate and restart SSH
+
+    - name: Allow OpenSSH through UFW before enabling firewall
+      community.general.ufw:
+        rule: allow
+        name: OpenSSH
+
+    - name: Enable UFW firewall
+      community.general.ufw:
+        state: enabled
+        policy: deny
+
+    - name: Ensure auditd is enabled and running
+      ansible.builtin.systemd:
+        name: auditd
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Validate and restart SSH
+      ansible.builtin.shell: sshd -t && systemctl restart ssh
+      changed_when: true

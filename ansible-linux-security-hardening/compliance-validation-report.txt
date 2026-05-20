@@ -1,0 +1,64 @@
+# Linux Hardening Compliance Validation Report
+
+## Validation Scope
+
+This report validates security hardening controls applied through Ansible on an Ubuntu Linux system.
+
+## Tools Used
+
+- Ansible
+- OpenSCAP scanner
+- UFW
+- auditd
+- systemd
+- Bash
+
+## Controls Validated
+
+### 1. SSH Hardening
+
+Validated SSH hardening drop-in configuration:
+
+- PasswordAuthentication no
+- PermitRootLogin prohibit-password
+- X11Forwarding no
+- MaxAuthTries 3
+- ClientAliveInterval 300
+- ClientAliveCountMax 2
+
+### 2. Firewall Hardening
+
+Validated UFW firewall status:
+
+- UFW enabled
+- Default incoming policy denied
+- OpenSSH explicitly allowed
+
+### 3. File Permission Hardening
+
+Validated critical file permissions:
+
+- /etc/passwd owned by root:root with mode 0644
+- /etc/shadow owned by root:shadow with mode 0640
+
+### 4. Service Hardening
+
+Validated that risky legacy services were stopped/disabled where present:
+
+- telnet
+- nfs-server
+- rpcbind
+
+### 5. Audit Service
+
+Validated auditd installation and service status.
+
+## OpenSCAP Note
+
+OpenSCAP scanner was installed successfully. However, Ubuntu 24.04 did not provide a ready distribution-specific SCAP Security Guide benchmark file in the available package sources during this lab session.
+
+Therefore, practical validation was performed using system-level evidence checks and Ansible verification output.
+
+## Result
+
+The system hardening workflow was successfully automated and validated.
